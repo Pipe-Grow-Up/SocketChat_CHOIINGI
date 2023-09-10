@@ -59,7 +59,7 @@ public class ChatServerThread extends Thread {
                         BufferedReader nameReader = new BufferedReader(new InputStreamReader(nameInput));
                         name = nameReader.readLine();
                         writer.println("닉네임이 " + name + "으로 설정되었습니다.");
-                        continue;
+                        clients.put(socket,name);
                     } else if (Integer.parseInt(readValue) == 2) {
                         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
                             Socket socket = entry.getKey();
@@ -74,13 +74,6 @@ public class ChatServerThread extends Thread {
                         clients.remove(socket);
                         continue;
                     }
-                }
-                // 클라이언트 모두에게 메세지 발송
-                for (Map.Entry<Socket, String> entry : clients.entrySet()) {
-                    out = socket.getOutputStream();
-                    writer = new PrintWriter(out, true);
-                    // 클라이언트에게 메세지 발송
-                    writer.println(name + " : " + readValue);
                 }
             }
         } catch (Exception e) {

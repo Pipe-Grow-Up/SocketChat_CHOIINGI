@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,13 +31,10 @@ public class Server {
                 String message = scanner.nextLine();
                 // 메세지 발송
                 writer.println(message);
-                if (message.equals("!")) {
-                    System.out.println("서버에서 보낸겁니다.");
-                    // Todo 계정관리
-                    // Todo 채팅방 목록
-                    // Todo 채팅방 생성
-                    // Todo 채팅방 입장 / 퇴장
-                    // Todo 클라이언트간 1대1 채팅 메세지 송수신
+                System.out.println("서버에서 보낸겁니다.");
+                if (message.startsWith("!chatList")) {
+                    //계정 관리
+                    System.out.println(clients.get(socket));
                 }
             }
         }catch(Exception e){//예외처리 발생시 실행
@@ -46,7 +44,7 @@ public class Server {
 
     public Server() {
         try {
-            int socketPort = 5553;
+            int socketPort = 5552;
             mServerSocket = new ServerSocket(socketPort);
             System.out.println("서버 시작!!!");
             mSocket = null;

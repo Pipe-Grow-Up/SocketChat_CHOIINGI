@@ -71,7 +71,7 @@ public class Client {
     public static void main(String[] args) {
         // 서버 ip, port 가져와 보내기.
         String ip = "192.168.21.144";
-        int port = 5553;
+        int port = 5552;
         new Client(ip, port);
     }
 }
