@@ -6,15 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import static Global.global.clients;
+
 public class ChatServerThread extends Thread {
     String name = "unknown"; // 클라이언트 이름 설정용
-    static HashMap<Socket, String> clients = new HashMap<>();
-    static Socket socket = null;
+    private Socket socket;
 
     Scanner scanner;
 
     public ChatServerThread(Socket socket) {
-        ChatServerThread.socket = socket; // 유저 socket을 할당
+        this.socket = socket; // 유저 socket을 할당
         // 유저를 맵에 삽입
         clients.put(socket,name);
     }
