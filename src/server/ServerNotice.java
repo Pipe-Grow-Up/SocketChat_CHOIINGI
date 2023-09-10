@@ -21,18 +21,19 @@ public class ServerNotice extends Thread {
             while (true) {
                 // 전할 메세지 입력
                 String message = scanner.nextLine();
-                // 메세지 발송
-                for (Map.Entry<Socket, String> entry : clients.entrySet()) {
-                    // 연결된 소켓에 메세지를 전송
-                    PrintWriter writer = new PrintWriter(entry.getKey().getOutputStream(), true);
-                    writer.println(message);
-                    System.out.println("서버에서 보낸겁니다.");
-                    if (message.startsWith("!chatList")) {
+                if (message.equals("!userList")) {
+                    // 접속 사용자 리스트 체크
+                    System.out.println("연결된 유저 목록 \n");
+                    for (Map.Entry<Socket, String> entry : clients.entrySet()) {
                         //계정 관리
                         System.out.println(clients.get(entry.getKey()));
                     }
                 }
-                System.out.println(clients.size());
+                // 메세지 발송
+                else{
+//                    PrintWriter writer = new PrintWriter(entry.getKey().getOutputStream(), true);
+//                    writer.println(message);
+                }
             }
         } catch (Exception e) {//예외처리 발생시 실행
             e.printStackTrace();  //예외처리시 출력

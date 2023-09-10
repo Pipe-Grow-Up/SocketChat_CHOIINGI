@@ -74,6 +74,13 @@ public class ChatServerThread extends Thread {
                         System.out.println("remove : " + socket.toString());
                         clients.remove(socket);
                         continue;
+                    }else{
+                        isFirstConnect = false;
+                        writer.print("잘못된 숫자를 입력하셨습니다.\n 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
+                                "2. 접속자 리스트 출력\n" +
+                                "3. 채팅 프로그램 종료\n"
+                        );
+                        writer.flush();
                     }
                 }
             }
