@@ -17,9 +17,8 @@ public class ChatServerThread extends Thread {
     public ChatServerThread(Socket socket) {
         this.socket = socket; // 유저 socket을 할당
         // 유저를 맵에 삽입
-        clients.put(socket,name);
+        clients.put(socket, name);
     }
-
 
 
     public void run() {
@@ -39,7 +38,7 @@ public class ChatServerThread extends Thread {
             writer.print("로비에 오신것을 환영합니다. 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
                     "2. 접속자 리스트 출력\n" +
                     "3. 채팅 프로그램 종료\n"
-                   );
+            );
             writer.flush();
             String readValue; // Client에서 보낸 값 저장
 
@@ -59,9 +58,9 @@ public class ChatServerThread extends Thread {
                         BufferedReader nameReader = new BufferedReader(new InputStreamReader(nameInput));
                         name = nameReader.readLine();
                         writer.println("닉네임이 " + name + "으로 설정되었습니다.");
-                        clients.put(socket,name);
+                        clients.put(socket, name);
                         isFirstConnect = true;
-                    } else if (Integer.parseInt(readValue) == 2) {
+                    } else if (readValue.equals("2")) {
                         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
                             Socket socket = entry.getKey();
                             String clientName = entry.getValue();
@@ -74,12 +73,12 @@ public class ChatServerThread extends Thread {
                                 "3. 채팅 프로그램 종료\n"
                         );
                         writer.flush();
-                    } else if (Integer.parseInt(readValue) == 3 || readValue.contains("/exit")) {
+                    } else if (readValue.equals("3") || readValue.contains("/exit")) {
                         System.out.println("채팅 프로그램을 종료합니다.");
                         System.out.println("remove : " + socket.toString());
                         clients.remove(socket);
-                    }else{
-                        if(!isFirstConnect){
+                    } else {
+                        if (!isFirstConnect) {
                             writer.print("잘못된 숫자를 입력하셨습니다.\n 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
                                     "2. 접속자 리스트 출력\n" +
                                     "3. 채팅 프로그램 종료\n"
@@ -88,6 +87,29 @@ public class ChatServerThread extends Thread {
                         }
                     }
                 }
+                if (readValue.startsWith("send:")) {
+                    // 클라이언트 간 1대1 메세지 송수신은 send:로 시작하며 /로 닉네임을 분리한다. ex) send:incava/안녕! -> 안녕! 메세지를 incava에 전송
+                    int startIndex = readValue.indexOf("send:") + "send:".length();
+                    int endIndex = readValue.indexOf("/");
+                    String extractedString = "";
+                    if (endIndex != -1) {
+                        // 닉네임 찾기 위함. :와 /사이를 찾아 가져온다.
+                        extractedString = readValue.substring(startIndex, endIndex);
+                        System.out.println(extractedString);
+                    } else {
+                        System.out.println("보내는 형식이 잘못 되었습니다.");
+                    }
+                    for (Map.Entry<Socket, String> entry : clients.entrySet()) {
+                        Socket socket = entry.getKey();
+                        String clientName = entry.getValue();
+                        if (clientName.equals(extractedString)) {
+                            // 닉네임이 일치하는 경우, 메세지 전송
+                            PrintWriter targetWriter = new PrintWriter(socket.getOutputStream(), true);
+                            targetWriter.println(clients.get(this.socket) +" : "+ readValue.substring(endIndex + 1));
+                        }
+                    }
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace(); // 예외처리
