@@ -48,7 +48,6 @@ public class ChatServerThread extends Thread {
             while ((readValue = reader.readLine()) != null) {
                 System.out.println(readValue);
                 if (!isFirstConnect && !readValue.isBlank()) { // 연결 후 한번만 노출
-                    isFirstConnect = true;
                     if (readValue.equals("1")) { // 1번 : 닉네임 입력
                         out = socket.getOutputStream();
                         writer = new PrintWriter(out, true);
@@ -61,6 +60,7 @@ public class ChatServerThread extends Thread {
                         name = nameReader.readLine();
                         writer.println("닉네임이 " + name + "으로 설정되었습니다.");
                         clients.put(socket,name);
+                        isFirstConnect = true;
                     } else if (Integer.parseInt(readValue) == 2) {
                         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
                             Socket socket = entry.getKey();
@@ -69,18 +69,23 @@ public class ChatServerThread extends Thread {
                             writer.println("클라이언트 소켓: " + socket);
                             writer.println("클라이언트 이름: " + clientName);
                         }
-                    } else if (Integer.parseInt(readValue) == 3 || readValue.contains("/exit")) {
-                        System.out.println("채팅 프로그램을 종료합니다.");
-                        System.out.println("remove : " + socket.toString());
-                        clients.remove(socket);
-                        continue;
-                    }else{
-                        isFirstConnect = false;
-                        writer.print("잘못된 숫자를 입력하셨습니다.\n 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
+                        writer.println("로비에 오신것을 환영합니다. 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
                                 "2. 접속자 리스트 출력\n" +
                                 "3. 채팅 프로그램 종료\n"
                         );
                         writer.flush();
+                    } else if (Integer.parseInt(readValue) == 3 || readValue.contains("/exit")) {
+                        System.out.println("채팅 프로그램을 종료합니다.");
+                        System.out.println("remove : " + socket.toString());
+                        clients.remove(socket);
+                    }else{
+                        if(!isFirstConnect){
+                            writer.print("잘못된 숫자를 입력하셨습니다.\n 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
+                                    "2. 접속자 리스트 출력\n" +
+                                    "3. 채팅 프로그램 종료\n"
+                            );
+                            writer.flush();
+                        }
                     }
                 }
             }

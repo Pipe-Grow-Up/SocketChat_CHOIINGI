@@ -17,7 +17,7 @@ public class Server {
 
     public Server() {
         try {
-            int socketPort = 5550;
+            int socketPort = 5556;
             mServerSocket = new ServerSocket(socketPort);
             System.out.println("서버 시작!!!");
             mSocket = null;

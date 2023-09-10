@@ -23,16 +23,22 @@ public class ServerNotice extends Thread {
                 String message = scanner.nextLine();
                 if (message.equals("!userList")) {
                     // 접속 사용자 리스트 체크
-                    System.out.println("연결된 유저 목록 \n");
+                    System.out.println("연결된 유저 목록");
                     for (Map.Entry<Socket, String> entry : clients.entrySet()) {
                         //계정 관리
                         System.out.println(clients.get(entry.getKey()));
                     }
+                } else if (message.startsWith("notice/")) {
+                    // 공지 문자열 제외하고 알림.
+                    String msg = message.substring("notice/".length());
+                    for (Map.Entry<Socket, String> entry : clients.entrySet()) {
+                        //계정 관리
+                        PrintWriter writer = new PrintWriter(entry.getKey().getOutputStream(), true);
+                        writer.println(msg);
+                    }
                 }
-                // 메세지 발송
                 else{
-//                    PrintWriter writer = new PrintWriter(entry.getKey().getOutputStream(), true);
-//                    writer.println(message);
+
                 }
             }
         } catch (Exception e) {//예외처리 발생시 실행
