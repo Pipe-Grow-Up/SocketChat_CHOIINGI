@@ -12,8 +12,6 @@ public class Server {
     private ServerSocket mServerSocket;
     private Socket mSocket;
 
-    Scanner scanner;
-
 
     public Server() {
         try {
@@ -23,9 +21,10 @@ public class Server {
             mSocket = null;
             System.out.println("socket : " + socketPort + "으로 서버가 열렸습니다.");
             System.out.println("클라이언트의 접속을 기다립니다.");
-            ServerNotice notice = new ServerNotice();
+            ServerNoticeThread notice = new ServerNoticeThread();
             notice.start();
             while (true) {
+                // 서버 소켓에서
                 mSocket = mServerSocket.accept();
                 Thread t1 = new ChatServerThread(mSocket);
                 t1.start(); // Thread 시작

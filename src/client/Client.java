@@ -23,6 +23,7 @@ public class Client {
             SendDataThread sendDataThread = new SendDataThread(mSocket); // 서버에 메세지 보내는 Thread
             Thread t1 = new Thread(receiveDataThread);
             Thread t2 = new Thread(sendDataThread);
+
             t1.start();
             t2.start();
 
@@ -70,7 +71,7 @@ public class Client {
 
     public static void main(String[] args) {
         // 서버 ip, port 가져와 보내기.
-        String ip = "192.168.21.144";
+        String ip = "127.0.0.1";
         int port = 5556;
         new Client(ip, port);
     }

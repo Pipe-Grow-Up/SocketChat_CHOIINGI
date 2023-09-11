@@ -7,8 +7,9 @@ import java.util.Scanner;
 
 import static Global.global.clients;
 
-public class ServerNotice extends Thread {
+public class ServerNoticeThread extends Thread {
     // 서버 공지를 위한 글 전체 공지 메세지 전송
+    // 네이밍은 쓰레드를 상속 받을 시, 클래스에 Thread를 적어주는 것이 좋을듯.
 
     Scanner scanner;
 

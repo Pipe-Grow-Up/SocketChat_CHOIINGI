@@ -2,36 +2,31 @@ package server;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 import static Global.global.clients;
 
 public class ChatServerThread extends Thread {
-    String name = "unknown"; // 클라이언트 이름 설정용
-    private Socket socket;
+    String mName = "unknown"; // 클라이언트 이름 설정용
+    private Socket mSocket;
 
-    Scanner scanner;
-
-    public ChatServerThread(Socket socket) {
-        this.socket = socket; // 유저 socket을 할당
+    public ChatServerThread(Socket mSocket) {
+        this.mSocket = mSocket; // 유저 socket을 할당
         // 유저를 맵에 삽입
-        clients.put(socket, name);
+        clients.put(mSocket, mName);
     }
-
 
     public void run() {
 
         try {
-            System.out.println("서버 : " + socket.getInetAddress()
+            System.out.println("서버 : " + mSocket.getInetAddress()
                     + " IP의 클라이언트와 연결되었습니다");
             // InputStream - 클라이언트에서 보낸 메세지 읽기
-            InputStream input = socket.getInputStream();
+            InputStream input = mSocket.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
             // OutputStream - 서버에서 클라이언트로 메세지 보내기
-            OutputStream out = socket.getOutputStream();
+            OutputStream out = mSocket.getOutputStream();
             PrintWriter writer = new PrintWriter(out, true);
 
             // 클라이언트에게 연결되었다는 메세지 보내기
@@ -48,17 +43,17 @@ public class ChatServerThread extends Thread {
                 System.out.println(readValue);
                 if (!isFirstConnect && !readValue.isBlank()) { // 연결 후 한번만 노출
                     if (readValue.equals("1")) { // 1번 : 닉네임 입력
-                        out = socket.getOutputStream();
+                        out = mSocket.getOutputStream();
                         writer = new PrintWriter(out, true);
                         writer.println("닉네임을 입력해주세요: ");
                         writer.flush();
                         // InputStream - 클라이언트에서 보낸 메세지 읽기
-                        InputStream nameInput = socket.getInputStream();
+                        InputStream nameInput = mSocket.getInputStream();
 
                         BufferedReader nameReader = new BufferedReader(new InputStreamReader(nameInput));
-                        name = nameReader.readLine();
-                        writer.println("닉네임이 " + name + "으로 설정되었습니다.");
-                        clients.put(socket, name);
+                        mName = nameReader.readLine();
+                        writer.println("닉네임이 " + mName + "으로 설정되었습니다.");
+                        clients.put(mSocket, mName);
                         isFirstConnect = true;
                     } else if (readValue.equals("2")) {
                         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
@@ -75,8 +70,8 @@ public class ChatServerThread extends Thread {
                         writer.flush();
                     } else if (readValue.equals("3") || readValue.contains("/exit")) {
                         System.out.println("채팅 프로그램을 종료합니다.");
-                        System.out.println("remove : " + socket.toString());
-                        clients.remove(socket);
+                        System.out.println("remove : " + mSocket.toString());
+                        clients.remove(mSocket);
                     } else {
                         if (!isFirstConnect) {
                             writer.print("잘못된 숫자를 입력하셨습니다.\n 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
@@ -105,7 +100,7 @@ public class ChatServerThread extends Thread {
                         if (clientName.equals(extractedString)) {
                             // 닉네임이 일치하는 경우, 메세지 전송
                             PrintWriter targetWriter = new PrintWriter(socket.getOutputStream(), true);
-                            targetWriter.println(clients.get(this.socket) +" : "+ readValue.substring(endIndex + 1));
+                            targetWriter.println(clients.get(this.mSocket) + " : " + readValue.substring(endIndex + 1));
                         }
                     }
                 }
