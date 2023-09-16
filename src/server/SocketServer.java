@@ -3,17 +3,16 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  * 1 대 1 소켓 통신 서버 예제
  */
-public class Server {
+public class SocketServer {
     private ServerSocket mServerSocket;
     private Socket mSocket;
 
 
-    public Server() {
+    public SocketServer() {
         try {
             int socketPort = 5556;
             mServerSocket = new ServerSocket(socketPort);
@@ -33,9 +32,5 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        Server server = new Server();
     }
 }
