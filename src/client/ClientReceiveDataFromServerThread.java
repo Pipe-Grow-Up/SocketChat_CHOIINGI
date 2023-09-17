@@ -9,14 +9,14 @@ import java.net.Socket;
 import static Global.global.cmdExitChatRoom;
 import static Global.global.cmdExitTargetChatRoom;
 
-class ReceiveDataThread implements Runnable {
-    // 받은 데이터 처리.
+class ClientReceiveDataFromServerThread implements Runnable {
+    // 서버에서 받은 데이터 처리.
     Socket mSocket; // socket 맴버변수
     BufferedReader mReader; // BufferReader 변수 reader 선언
 
     InputStream inputStream;
 
-    public ReceiveDataThread(Socket socket) { // 생성자
+    public ClientReceiveDataFromServerThread(Socket socket) { // 생성자
         this.mSocket = socket; // 현재 소켓을 맴버에 할당.
         try {
             // 서버 메세지를 읽어오기

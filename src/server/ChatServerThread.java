@@ -11,7 +11,6 @@ public class ChatServerThread extends Thread {
 
     private Socket mSocket;
 
-    //
     boolean isJoinChatRoom;
 
 
@@ -94,7 +93,7 @@ public class ChatServerThread extends Thread {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append("채팅방 목록\n");
                         stringBuilder.append("------------------------\n");
-                        for (ChatRoom chatRoom : serverChatRooms) {
+                        for (ChatRoomData chatRoom : serverChatRooms) {
                             stringBuilder.append(chatRoom.getmHostName() + "님의 채팅방 ||  " + chatRoom.isCanJoinChatRoomCmt() + "\n");
                         }
                         writer.println(stringBuilder);
@@ -102,7 +101,7 @@ public class ChatServerThread extends Thread {
                     if (readValue.startsWith(cmdWantJoinChatRoom)) {
                         // 채팅방 진입을 원하는 커맨드
                         String wantHostID = readValue.split(cmdWantJoinChatRoom)[1];
-                        for (ChatRoom chatRoom : serverChatRooms) {
+                        for (ChatRoomData chatRoom : serverChatRooms) {
                             if (chatRoom.getmHostName().equals(wantHostID)) {
                                 //원하는 호스트 닉네임을 찾기위함.
                                 // 자신의 정보를 넣고 참가.
@@ -124,7 +123,7 @@ public class ChatServerThread extends Thread {
 
                     if (readValue.equals(cmdCreateChatRoom)) {
                         // 채팅방 만들기 요청
-                        ChatRoom chatRoom = new ChatRoom(mSocket, mNickName);
+                        ChatRoomData chatRoom = new ChatRoomData(mSocket, mNickName);
                         // 채팅방 목록에 저장.
                         serverChatRooms.add(chatRoom);
                         isJoinChatRoom = true;
@@ -163,8 +162,8 @@ public class ChatServerThread extends Thread {
                         continue;
                     }
                     Socket _targetSocket = null;
-                    ChatRoom _targetChatRoom = null;
-                    for (ChatRoom chatRoom : serverChatRooms) {
+                    ChatRoomData _targetChatRoom = null;
+                    for (ChatRoomData chatRoom : serverChatRooms) {
                         if (chatRoom.getmHostName().equals(mNickName)) {
                             //호스트 이름이 나와 같은 경우, 게스트 소켓을 가져옴.
                             _targetSocket = chatRoom.getmGuestSocket();

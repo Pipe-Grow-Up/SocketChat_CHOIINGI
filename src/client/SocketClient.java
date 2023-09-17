@@ -19,9 +19,9 @@ public class SocketClient {
             this.port = port;
             // 서버에 요청 보내기
             mSocket = new Socket(ip,port);
-            ReceiveDataThread receiveDataThread = new ReceiveDataThread(mSocket); // 서버로부터 메세지 받는 Thread
-            SendDataThread sendDataThread = new SendDataThread(mSocket); // 서버에 메세지 보내는 Thread
-            Thread t1 = new Thread(receiveDataThread);
+            ClientReceiveDataFromServerThread clientReceiveDataThread = new ClientReceiveDataFromServerThread(mSocket); // 서버로부터 메세지 받는 Thread
+            ClientSendDataToServerThread sendDataThread = new ClientSendDataToServerThread(mSocket); // 서버에 메세지 보내는 Thread
+            Thread t1 = new Thread(clientReceiveDataThread);
             Thread t2 = new Thread(sendDataThread);
 
             t1.start();

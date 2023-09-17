@@ -1,6 +1,6 @@
 package Global;
 
-import server.ChatRoom;
+import server.ChatRoomData;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -12,8 +12,7 @@ public class global {
 
 
     // 서버에 있는 채팅방 관리
-    public static List<ChatRoom> serverChatRooms = new ArrayList<>();
-
+    public static List<ChatRoomData> serverChatRooms = new ArrayList<>();
 
     public static String cmtWelcome = "로비에 오신것을 환영합니다. 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
             "2. 접속자 리스트 출력\n" +

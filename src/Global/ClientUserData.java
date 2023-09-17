@@ -2,11 +2,11 @@ package Global;
 
 import java.net.Socket;
 
-public class ClientUserInfo {
+public class ClientUserData {
     Socket mSocket;
 
     String mNickName;
-    public ClientUserInfo(Socket socket, String nickName) {
+    public ClientUserData(Socket socket, String nickName) {
         mSocket = socket;
         mNickName = nickName;
     }

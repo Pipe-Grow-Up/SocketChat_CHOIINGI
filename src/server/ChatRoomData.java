@@ -1,6 +1,6 @@
 package server;
 
-import Global.ClientUserInfo;
+import Global.ClientUserData;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -8,11 +8,11 @@ import java.util.List;
 
 import static Global.global.*;
 
-public class ChatRoom {
+public class ChatRoomData {
 
 
     // 방 생성자 이름
-    public List<ClientUserInfo> serverChatRoomInfoList = new ArrayList<>();
+    public List<ClientUserData> serverChatRoomInfoList = new ArrayList<>();
 
     private String mHostName;
 
@@ -26,12 +26,12 @@ public class ChatRoom {
     private Socket mGuestSocket;
 
 
-    public ChatRoom(Socket socket, String hostName){
+    public ChatRoomData(Socket socket, String hostName){
         // 생성 시, 호스트 이름과 정보 안에 이름 삽입.
 
         mHostName = hostName;
         mHostSocket = socket;
-        serverChatRoomInfoList.add(new ClientUserInfo(socket,hostName));
+        serverChatRoomInfoList.add(new ClientUserData(socket,hostName));
     }
 
     public String getmHostName() {
@@ -50,7 +50,7 @@ public class ChatRoom {
         this.mGuestName = mGuestName;
     }
 
-    public List<ClientUserInfo> getServerChatRoomInfoList() {
+    public List<ClientUserData> getServerChatRoomInfoList() {
         return serverChatRoomInfoList;
     }
 
@@ -70,7 +70,7 @@ public class ChatRoom {
             return cmtFullRoom;
         }
         // 게스트 입장.
-        serverChatRoomInfoList.add(new ClientUserInfo(socket,guestName));
+        serverChatRoomInfoList.add(new ClientUserData(socket,guestName));
         mGuestName = guestName;
         mGuestSocket = socket;
         return  mHostName+"님의 채팅방에 입장하였습니다.";
@@ -88,7 +88,7 @@ public class ChatRoom {
 
     Socket getSocketInfo(String nickName){
         // 이름을 통해 소켓 정보를 가져옴.
-        for(ClientUserInfo clientUserInfo :serverChatRoomInfoList){
+        for(ClientUserData clientUserInfo :serverChatRoomInfoList){
             if(clientUserInfo.getmNickName().equals(nickName)){
                 return clientUserInfo.getmSocket();
             }
