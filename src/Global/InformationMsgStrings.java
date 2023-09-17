@@ -1,20 +1,8 @@
 package Global;
 
-import server.ChatRoomData;
-
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-public class global {
-    // 전역으로 사용하는 데이터모음
-
-    public static HashMap<Socket, String> clients = new HashMap<>();
-
-
-    // 서버에 있는 채팅방 관리
-    public static List<ChatRoomData> serverChatRooms = new ArrayList<>();
+public class InformationMsgStrings {
+    // 유저에게 보내는 지시 comment (cmt)
+    // 프로그램 이용하는데 필요한 Information Message 모음 클래스
 
     public static String cmtWelcome = "로비에 오신것을 환영합니다. 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
             "2. 접속자 리스트 출력\n" +
@@ -33,24 +21,11 @@ public class global {
     public static String cmtNullRoom = "현재 없어진 방입니다.";
 
     public static String cmtFullRoom = "이미 모두 가득 찬 방입니다.";
-
-    public static String cmdCreateChatRoom = "!createChatRoom";
-
+    public static String cmtIsNotJoinGuest = "아직 채팅방에 사람이 들어오지 않았습니다.";
+    public static String cmtExitChatRoom = "채팅방이 종료되었습니다.";
     public static String cmtCanJoinChatRoom = "입장 가능";
     public static String cmtCanNotJoinChatRoom = "입장 불가능";
-
-    public static String cmtIsNotJoinGuest = "아직 채팅방에 사람이 들어오지 않았습니다.";
-
-    public static String cmdWantJoinChatRoom = "join/";
-
-    public static String cmdExitChatRoom = "!exitChatRoom";
-
-    public static String cmdExitTargetChatRoom = "!exitTargetChatRoom";
-
-    public static String cmtExitChatRoom = "채팅방이 종료되었습니다.";
-
-    public static String initNickName = "unknown";
-
-
-
+    public static String cmtAlreadyNicknameExist = "닉네임이 이미 존재 합니다. 다시 입력해주세요.";
+    public static String cmtEnterChatRoomSuccess = "채팅방에 성공적으로 입장하였습니다.";
+    public static String cmtNotEnterPartner = "아직 상대방이 들어오지 않았습니다.";
 }

@@ -4,7 +4,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
-import static Global.global.*;
+import static Global.InformationMsgStrings.*;
+import static Global.Global.*;
+import static Global.CommandMsgStrings.*;
 
 public class ChatServerThread extends Thread {
     // 채팅 Thread
@@ -51,7 +53,7 @@ public class ChatServerThread extends Thread {
             while ((readValue = reader.readLine()) != null) {
 
                 if (!readValue.isBlank()) { // 연결 후 한번만 노출
-                    if (readValue.equals("1")) { // 1번 : 닉네임 입력
+                    if (readValue.equals(cmdInitialMenuNumberSetNickName)) { // 1번 : 닉네임 입력
                         writer.println(cmtInputNickName);
                         writer.flush();
                         // InputStream - 클라이언트에서 보낸 메세지 읽기
@@ -60,14 +62,14 @@ public class ChatServerThread extends Thread {
                         BufferedReader nameReader = new BufferedReader(new InputStreamReader(nameInput));
                         String wantNickName = nameReader.readLine();
                         if (isExistNickName(wantNickName)) {
-                            writer.println("닉네임이 이미 존재 합니다. 다시 입력해주세요.");
+                            writer.println(cmtAlreadyNicknameExist);
                         } else {
                             mNickName = wantNickName;
                             writer.println("닉네임이 " + mNickName + "으로 설정되었습니다.");
                             clients.put(mSocket, mNickName);
                         }
 
-                    } else if (readValue.equals("2")) {
+                    } else if (readValue.equals(cmdInitialMenuNumberUserList)) {
                         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
                             Socket socket = entry.getKey();
                             String clientName = entry.getValue();
@@ -77,7 +79,7 @@ public class ChatServerThread extends Thread {
                         }
                         writer.println(cmtWelcome);
                         writer.flush();
-                    } else if (readValue.equals("3")) {
+                    } else if (readValue.equals(cmdInitialMenuNumberExit)) {
                         System.out.println(cmtExitChat);
                         System.out.println("remove : " + mSocket.toString());
                         clients.remove(mSocket);
@@ -87,7 +89,7 @@ public class ChatServerThread extends Thread {
                 }
                 if (!isJoinChatRoom) {
                     // 아직 chatRoom에 들어가지 않았을 경우
-                    if (readValue.equals("!chatRoomList")) {
+                    if (readValue.equals(cmdShowChatRoomList)) {
                         // 채팅방 리스트 목록 요청
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append("채팅방 목록\n");
@@ -126,7 +128,7 @@ public class ChatServerThread extends Thread {
                         // 채팅방 목록에 저장.
                         serverChatRooms.add(chatRoom);
                         isJoinChatRoom = true;
-                        writer.println("채팅방에 성공적으로 입장하였습니다.");
+                        writer.println(cmtEnterChatRoomSuccess);
                     }
 
                     // 로비 이후, 클라이언트가 보내는 메세지 분기.
@@ -187,7 +189,7 @@ public class ChatServerThread extends Thread {
                         printWriter.println(readValue);
                     } else if (_targetSocket == null) {
                         //만약 아직 상대가 없을 경우
-                        writer.println("아직 상대방이 들어오지 않았습니다.");
+                        writer.println(cmtNotEnterPartner);
                     } else {
                         // 상대가 있을 경우, 메세지 전달.
                         PrintWriter printWriter = new PrintWriter(_targetSocket.getOutputStream(), true);

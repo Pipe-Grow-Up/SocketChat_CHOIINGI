@@ -3,6 +3,8 @@ package client;
 import java.io.*;
 import java.net.Socket;
 
+import static Global.CommandMsgStrings.cmdInitialMenuNumberExit;
+
 public class ClientSendDataToServerThread implements Runnable {
     // 서버로 메시지 보내는 Thread
 
@@ -24,7 +26,7 @@ public class ClientSendDataToServerThread implements Runnable {
                 String message = mReader.readLine();                                            // 전할 메세지 입력
                 writer.println(message);                                                        // 메세지 발송
                 System.out.println("송신 성공!");
-                if (message.equals("3")) {
+                if (message.equals(cmdInitialMenuNumberExit)) {
                     System.out.println("채팅 프로그램 종료.");
                     break;
                 } else if (message.startsWith("!")) {

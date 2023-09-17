@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Global.global.*;
+import static Global.InformationMsgStrings.*;
 
 public class ChatRoomData {
     // 채팅방 데이터 클래스

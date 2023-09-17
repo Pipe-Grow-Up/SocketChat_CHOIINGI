@@ -6,8 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import static Global.global.cmdExitChatRoom;
-import static Global.global.cmdExitTargetChatRoom;
+import static Global.CommandMsgStrings.*;
 
 class ClientReceiveDataFromServerThread implements Runnable {
     // 서버에서 받은 데이터 처리 Thread
