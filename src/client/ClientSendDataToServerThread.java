@@ -4,7 +4,8 @@ import java.io.*;
 import java.net.Socket;
 
 public class ClientSendDataToServerThread implements Runnable {
-    // 서버에서 받은 데이터 처리.
+    // 서버로 메시지 보내는 Thread
+
     Socket mSocket; // socket 맴버변수
     BufferedReader mReader; // BufferReader 변수 reader 선언
 
@@ -16,7 +17,7 @@ public class ClientSendDataToServerThread implements Runnable {
     public void run() {
         try {
 
-            mReader = new BufferedReader(new BufferedReader(new InputStreamReader(System.in))); // 사용자의 입력을 받으
+            mReader = new BufferedReader(new BufferedReader(new InputStreamReader(System.in))); // 사용자의 입력을 받을준비
             PrintWriter writer = new PrintWriter(mSocket.getOutputStream(), true);    // 소켓에 대한 송신 준비
 
             while (true) {

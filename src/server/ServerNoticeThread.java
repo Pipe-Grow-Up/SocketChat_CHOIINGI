@@ -34,7 +34,7 @@ public class ServerNoticeThread extends Thread {
                     for (Map.Entry<Socket, String> entry : clients.entrySet()) {
                         //계정 관리
                         PrintWriter writer = new PrintWriter(entry.getKey().getOutputStream(), true);
-                        writer.println("From server to All: "+msg);
+                        writer.println("From server to All: " + msg);
                     }
                 } else {
 

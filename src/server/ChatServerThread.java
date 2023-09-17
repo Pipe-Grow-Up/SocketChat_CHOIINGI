@@ -7,23 +7,24 @@ import java.util.Map;
 import static Global.global.*;
 
 public class ChatServerThread extends Thread {
+    // 채팅 Thread
+
     String mNickName; // 클라이언트 이름 설정용
 
-    private Socket mSocket;
+    private Socket mSocket; // 소켓 멤버변수
 
-    boolean isJoinChatRoom;
+    boolean isJoinChatRoom; // 방에 참가했는지 여부 확인
 
 
     public ChatServerThread(Socket mSocket) {
         this.mSocket = mSocket; // 유저 socket을 할당
-        // 유저를 맵에 삽입
-        clients.put(mSocket, mNickName);
-        isJoinChatRoom = false;
+        clients.put(mSocket, mNickName); // 유저를 맵에 삽입
+        isJoinChatRoom = false; // 아직 참가하지 않았음을 표시
     }
 
-    boolean isExistNickName(String nickName) {
+    boolean isExistNickName(String _nickName) {
         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
-            if (entry.getValue().equals(nickName)) {
+            if (entry.getValue().equals(_nickName)) {
                 // 만약 같은 닉네임이 있을 경우
                 return true;
             }
@@ -36,21 +37,19 @@ public class ChatServerThread extends Thread {
         try {
             System.out.println("서버 : " + mSocket.getInetAddress()
                     + " IP의 클라이언트와 연결되었습니다");
-            // InputStream - 클라이언트에서 보낸 메세지 읽기
-            InputStream input = mSocket.getInputStream();
+            InputStream input = mSocket.getInputStream(); // InputStream - 클라이언트에서 보낸 메세지 읽기
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
-            // OutputStream - 서버에서 클라이언트로 메세지 보내기
-            OutputStream out = mSocket.getOutputStream();
+            OutputStream out = mSocket.getOutputStream();  // OutputStream - 서버에서 클라이언트로 메세지 보내기
             PrintWriter writer = new PrintWriter(out, true);
 
-            // 클라이언트에게 연결되었다는 메세지 보내기
-            writer.print(cmtWelcome);
+
+            writer.print(cmtWelcome);  // 클라이언트에게 연결되었다는 메세지 보내기
             writer.flush();
             String readValue; // Client에서 보낸 값 저장
 
             while ((readValue = reader.readLine()) != null) {
-//                System.out.println(readValue);
+
                 if (!readValue.isBlank()) { // 연결 후 한번만 노출
                     if (readValue.equals("1")) { // 1번 : 닉네임 입력
                         writer.println(cmtInputNickName);
@@ -83,7 +82,7 @@ public class ChatServerThread extends Thread {
                         System.out.println("remove : " + mSocket.toString());
                         clients.remove(mSocket);
                     } else {
-                            writer.print(cmtWrongInputCmtAndWelcome);
+                        writer.print(cmtWrongInputCmtAndWelcome);
                     }
                 }
                 if (!isJoinChatRoom) {
@@ -108,13 +107,13 @@ public class ChatServerThread extends Thread {
                                 String joinResult = chatRoom.joinChatRoom(mSocket, mNickName);
                                 // 객체 안에 이미 있는 채팅방 연계 삽입.
                                 writer.println(joinResult);
-                                if(!joinResult.equals(cmtFullRoom) && !joinResult.equals(cmtNullRoom)){
+                                if (!joinResult.equals(cmtFullRoom) && !joinResult.equals(cmtNullRoom)) {
                                     // 만약 없어진 방 또는 벙애 모두 차있을 경우가 아니라면
                                     isJoinChatRoom = true;
                                 }
                                 //상대방에게 채팅방에 들어온것을 인지
                                 PrintWriter printWriter = new PrintWriter(chatRoom.getmHostSocket().getOutputStream(), true);
-                                printWriter.println(mNickName+"님이 채팅방에 들어오셨습니다.");
+                                printWriter.println(mNickName + "님이 채팅방에 들어오셨습니다.");
                                 break;
                             }
                         }
@@ -154,7 +153,7 @@ public class ChatServerThread extends Thread {
                         }
                     }
                 } else {
-                    if(readValue.equals(cmdExitTargetChatRoom)){
+                    if (readValue.equals(cmdExitTargetChatRoom)) {
                         //상대방이 방에 나갔다는 알림일 경우
                         isJoinChatRoom = false;
                         writer.println(cmtExitChatRoom);
@@ -176,7 +175,7 @@ public class ChatServerThread extends Thread {
                             break;
                         }
                     }
-                    if(readValue.startsWith(cmdExitChatRoom)){
+                    if (readValue.startsWith(cmdExitChatRoom)) {
                         //만약 메세지가 방을 나가고싶은 커맨드일 경우,
                         isJoinChatRoom = false;
                         serverChatRooms.remove(_targetChatRoom);
@@ -186,11 +185,10 @@ public class ChatServerThread extends Thread {
                         assert _targetSocket != null;
                         PrintWriter printWriter = new PrintWriter(_targetSocket.getOutputStream(), true);
                         printWriter.println(readValue);
-                    }
-                    else if(_targetSocket == null){
+                    } else if (_targetSocket == null) {
                         //만약 아직 상대가 없을 경우
                         writer.println("아직 상대방이 들어오지 않았습니다.");
-                    }else{
+                    } else {
                         // 상대가 있을 경우, 메세지 전달.
                         PrintWriter printWriter = new PrintWriter(_targetSocket.getOutputStream(), true);
                         printWriter.println(readValue);

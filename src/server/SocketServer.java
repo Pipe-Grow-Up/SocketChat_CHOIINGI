@@ -5,8 +5,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * 1 대 1 소켓 통신 서버 예제
+ * 소켓통신 서버 클래스
  */
+
 public class SocketServer {
     private ServerSocket mServerSocket;
     private Socket mSocket;
@@ -27,7 +28,7 @@ public class SocketServer {
                 mSocket = mServerSocket.accept();
                 Thread t1 = new ChatServerThread(mSocket);
                 t1.start(); // Thread 시작
-                // 서버에서 글 작성 가능 - 서버 공지
+
             }
         } catch (IOException e) {
             e.printStackTrace();

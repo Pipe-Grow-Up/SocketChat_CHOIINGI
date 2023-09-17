@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class global {
+    // 전역으로 사용하는 데이터모음
+
     public static HashMap<Socket, String> clients = new HashMap<>();
 
 
@@ -22,7 +24,6 @@ public class global {
 
     public static String cmtWrongInputCmtAndWelcome = "잘못된 숫자를 입력하셨습니다.\n 원하시는 기능을 숫자로 입력해주세요!\n" + "1. 닉네임 설정\n" +
             "2. 접속자 리스트 출력\n" +
-
             "3. 채팅 프로그램 종료\n";
 
     public static String cmtExitChat = "채팅 프로그램을 종료합니다.";
