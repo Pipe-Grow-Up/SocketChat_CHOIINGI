@@ -43,5 +43,14 @@ public class global {
 
     public static String cmdWantJoinChatRoom = "join/";
 
+    public static String cmdExitChatRoom = "!exitChatRoom";
+
+    public static String cmdExitTargetChatRoom = "!exitTargetChatRoom";
+
+    public static String cmtExitChatRoom = "채팅방이 종료되었습니다.";
+
+    public static String initNickName = "unknown";
+
+
 
 }

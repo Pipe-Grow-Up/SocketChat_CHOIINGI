@@ -3,7 +3,11 @@ package client;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
+
+import static Global.global.cmdExitChatRoom;
+import static Global.global.cmdExitTargetChatRoom;
 
 class ReceiveDataThread implements Runnable {
     // 받은 데이터 처리.
@@ -25,9 +29,17 @@ class ReceiveDataThread implements Runnable {
     public void run() {
         try {
             mReader = new BufferedReader(new InputStreamReader(inputStream));
-            System.out.print("서버 공지 : ");
             while( inputStream != null) { // 무한반복
-                System.out.println(mReader.readLine());
+                String receiveMsg = mReader.readLine();
+                if(receiveMsg.equals(cmdExitChatRoom)){
+                    //만약 상대방이 나가고싶다는 코멘트를 할 경우,
+                    PrintWriter writer = new PrintWriter(mSocket.getOutputStream(), true);
+                    writer.println(cmdExitTargetChatRoom);
+                    //타겟(상대방)이 방에 나감을 서버에 알림.
+                }else{
+                    System.out.println(receiveMsg);
+                }
+
             }
         } catch (Exception e) {//예외처리 발생시 실행
             e.printStackTrace();  //예외처리시 출력
