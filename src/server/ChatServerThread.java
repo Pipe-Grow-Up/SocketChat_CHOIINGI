@@ -1,17 +1,20 @@
 package server;
 
+import Global.CommandMsgStrings;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
-import static Global.InformationMsgStrings.*;
-import static Global.Global.*;
 import static Global.CommandMsgStrings.*;
+import static Global.Global.clients;
+import static Global.Global.serverChatRooms;
+import static Global.InformationMsgStrings.*;
 
 public class ChatServerThread extends Thread {
     // 채팅 Thread
 
-    String mNickName; // 클라이언트 이름 설정용
+    String mNickName = CommandMsgStrings.initNickName; // 클라이언트 이름 설정용
 
     private Socket mSocket; // 소켓 멤버변수
 
@@ -26,6 +29,7 @@ public class ChatServerThread extends Thread {
 
     boolean isExistNickName(String _nickName) {
         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
+            System.out.println("here are : "+entry.getValue());
             if (entry.getValue().equals(_nickName)) {
                 // 만약 같은 닉네임이 있을 경우
                 return true;
@@ -61,13 +65,18 @@ public class ChatServerThread extends Thread {
 
                         BufferedReader nameReader = new BufferedReader(new InputStreamReader(nameInput));
                         String wantNickName = nameReader.readLine();
-                        if (isExistNickName(wantNickName)) {
+
+                        while (isExistNickName(wantNickName)) {
+                            // 이름을 입력받은 후 while문에서 유일한 이름인지 검사한다.
+                            // 이름이 중복되지 않으면 while문을 종료하고 이름을 지정한다.
+
                             writer.println(cmtAlreadyNicknameExist);
-                        } else {
+                            wantNickName = nameReader.readLine();
+                        }
+
                             mNickName = wantNickName;
                             writer.println("닉네임이 " + mNickName + "으로 설정되었습니다.");
                             clients.put(mSocket, mNickName);
-                        }
 
                     } else if (readValue.equals(cmdInitialMenuNumberUserList)) {
                         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
