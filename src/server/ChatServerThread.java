@@ -29,7 +29,6 @@ public class ChatServerThread extends Thread {
 
     boolean isExistNickName(String _nickName) {
         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
-            System.out.println("here are : "+entry.getValue());
             if (entry.getValue().equals(_nickName)) {
                 // 만약 같은 닉네임이 있을 경우
                 return true;
@@ -54,9 +53,13 @@ public class ChatServerThread extends Thread {
             writer.flush();
             String readValue; // Client에서 보낸 값 저장
 
+            boolean identify = false; // 연결 후 리스트를 한번만 노출하려고 check하는  변수
+
             while ((readValue = reader.readLine()) != null) {
 
-                if (!readValue.isBlank()) { // 연결 후 한번만 노출
+                if (!identify && !readValue.isBlank()) { // 연결 후 한번만 노출
+                    identify = true;
+
                     if (readValue.equals(cmdInitialMenuNumberSetNickName)) { // 1번 : 닉네임 입력
                         writer.println(cmtInputNickName);
                         writer.flush();
@@ -74,9 +77,9 @@ public class ChatServerThread extends Thread {
                             wantNickName = nameReader.readLine();
                         }
 
-                            mNickName = wantNickName;
-                            writer.println("닉네임이 " + mNickName + "으로 설정되었습니다.");
-                            clients.put(mSocket, mNickName);
+                        mNickName = wantNickName;
+                        writer.println("닉네임이 " + mNickName + "으로 설정되었습니다.");
+                        clients.put(mSocket, mNickName);
 
                     } else if (readValue.equals(cmdInitialMenuNumberUserList)) {
                         for (Map.Entry<Socket, String> entry : clients.entrySet()) {
@@ -96,6 +99,13 @@ public class ChatServerThread extends Thread {
                         writer.print(cmtWrongInputCmtAndWelcome);
                     }
                 }
+                if(readValue.equals(cmdCheckUserList)){
+                    writer.println("연결된 유저 목록");
+                    for (Map.Entry<Socket, String> entry : clients.entrySet()) {
+                        //계정 관리
+                        writer.println(clients.get(entry.getKey()));
+                    }
+                }
                 if (!isJoinChatRoom) {
                     // 아직 chatRoom에 들어가지 않았을 경우
                     if (readValue.equals(cmdShowChatRoomList)) {
@@ -110,7 +120,7 @@ public class ChatServerThread extends Thread {
                     }
                     if (readValue.startsWith(cmdWantJoinChatRoom)) {
                         // 채팅방 진입을 원하는 커맨드
-                        String wantHostID = readValue.split(cmdWantJoinChatRoom)[1];
+                        String wantHostID = readValue.split(cmdWantJoinChatRoom)[1]; // 명령어 : join/상대방닉네임
                         for (ChatRoomData chatRoom : serverChatRooms) {
                             if (chatRoom.getmHostName().equals(wantHostID)) {
                                 //원하는 호스트 닉네임을 찾기위함.
